@@ -1,5 +1,5 @@
 // Importe les fonctions nécessaires
-import { loginUser } from '../login_service.js';
+import { loginUser } from './login_service.js';
 import {token_sauvegarde} from './token_service.js';
 
 // Gère le chargement du DOM
