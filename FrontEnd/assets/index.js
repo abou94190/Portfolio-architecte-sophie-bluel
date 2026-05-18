@@ -1,55 +1,32 @@
+import { fetchWorks, deleteWork, addWork } from './works_service.js';
+import { fetchCategories } from './categories_service.js';
+import { token_sauvegarde } from './token_service.js';
+ 
 // =============================================
-// CHARGEMENT DES TRAVAUX dans la galerie
+// CHARGEMENT INITIAL : travaux + filtres
 // =============================================
-fetch("http://localhost:5678/api/works")
-    .then(function (response) {
-        if (response.ok) return response.json();
-    })
-    .then(function (works) {
-        works.forEach(function (work) {
-            ajouterWorkDansGalerie(work);
+fetchWorks().then(works => works.forEach(ajouterWorkDansGalerie));
+ 
+fetchCategories().then(categories => {
+    categories.forEach(category => {
+        let myButton = document.createElement('button');
+        myButton.classList.add('work-filter', 'filters-design');
+        if (category.id === 0) myButton.classList.add('filter-active', 'filter-all');
+        myButton.setAttribute('data-filter', category.id);
+        myButton.textContent = category.name;
+        document.querySelector("div.filters").appendChild(myButton);
+ 
+        myButton.addEventListener('click', function (event) {
+            event.preventDefault();
+            document.querySelectorAll('.work-filter').forEach(btn => btn.classList.remove('filter-active'));
+            event.currentTarget.classList.add('filter-active');
+            const categoryId = event.currentTarget.getAttribute('data-filter');
+            document.querySelectorAll('.work-item').forEach(item => item.style.display = 'none');
+            document.querySelectorAll('.work-item.category-id-' + categoryId).forEach(item => item.style.display = 'block');
         });
-    })
-    .catch(function (err) {
-        console.error("Erreur chargement travaux :", err);
     });
-
-// =============================================
-// CHARGEMENT DES FILTRES de catégories
-// =============================================
-fetch("http://localhost:5678/api/categories")
-    .then(function (response) {
-        if (response.ok) return response.json();
-    })
-    .then(function (categories) {
-        categories.unshift({ id: 0, name: 'Tous' });
-        categories.forEach(function (category) {
-            let myButton = document.createElement('button');
-            myButton.classList.add('work-filter', 'filters-design');
-            if (category.id === 0) myButton.classList.add('filter-active', 'filter-all');
-            myButton.setAttribute('data-filter', category.id);
-            myButton.textContent = category.name;
-            document.querySelector("div.filters").appendChild(myButton);
-
-            myButton.addEventListener('click', function (event) {
-                event.preventDefault();
-                document.querySelectorAll('.work-filter').forEach(function (btn) {
-                    btn.classList.remove('filter-active');
-                });
-                event.currentTarget.classList.add('filter-active');
-                let categoryId = event.currentTarget.getAttribute('data-filter');
-                document.querySelectorAll('.work-item').forEach(function (item) {
-                    item.style.display = 'none';
-                });
-                document.querySelectorAll('.work-item.category-id-' + categoryId).forEach(function (item) {
-                    item.style.display = 'block';
-                });
-            });
-        });
-    })
-    .catch(function (err) {
-        console.error("Erreur chargement catégories :", err);
-    });
+});
+ 
 
 // =============================================
 // HELPER : créer un <figure> dans la galerie principale
@@ -134,13 +111,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     myImg.alt = work.title;
                     myFigure.appendChild(myImg);
 
-                    let myFigCaption = document.createElement('figcaption');
-                    myFigCaption.textContent = 'éditer';
-                    myFigure.appendChild(myFigCaption);
-
-                    let crossIcon = document.createElement('i');
-                    crossIcon.className = 'fa-solid fa-arrows-up-down-left-right cross';
-                    myFigure.appendChild(crossIcon);
 
                     let trashIcon = document.createElement('i');
                     trashIcon.className = 'fa-solid fa-trash-can trash';
