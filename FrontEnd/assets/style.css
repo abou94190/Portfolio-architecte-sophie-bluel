@@ -374,3 +374,7 @@ body.connected .only-admin:hover { text-decoration: underline; }
 	align-self: center;
 	transition: background-color 0.2s;
 }
+li a {
+	text-decoration: none;
+	color: #000;
+}
