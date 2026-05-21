@@ -44,7 +44,7 @@ export async function addWork(formData, token) {
             body: formData
         });
 
-        if (![200, 201].includes(response.status)) {
+        if (![200, 21].includes(response.status)) {
             throw new Error("Erreur lors de l'ajout du projet");
         }
 
