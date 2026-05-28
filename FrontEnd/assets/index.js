@@ -61,19 +61,17 @@ function createWorkCard(work) {
 // FILTRES
 // ===========================
 async function loadFilters() {
-
     const categories = await fetchCategories();
 
-    const allButton = createFilterButton({
+    filtersContainer.innerHTML = '';
 
-    });
+    const allCategory = { id: 0, name: 'Tous' };
 
+    const allButton = createFilterButton(allCategory);
     filtersContainer.appendChild(allButton);
 
     categories.forEach(category => {
-
         const button = createFilterButton(category);
-
         filtersContainer.appendChild(button);
     });
 }
@@ -82,7 +80,6 @@ function createFilterButton(category) {
 
     const button = document.createElement('button');
 
-    // mêmes classes CSS que ton ancien projet
     button.classList.add(
         'work-filter',
         'filters-design'

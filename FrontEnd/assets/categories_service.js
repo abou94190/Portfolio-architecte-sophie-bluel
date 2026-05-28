@@ -7,8 +7,7 @@ export async function fetchCategories() {
         if (!response.ok) throw new Error("Erreur lors de la récupération des catégories");
         // Convertit la réponse en JSON
         let categories = await response.json();
-        // Ajoute une catégorie "Tous" au début du tableau
-        categories.unshift({ id: 0, name: 'Tous' });
+
         // Retourne les catégories
         return categories;
     } catch (error) {
