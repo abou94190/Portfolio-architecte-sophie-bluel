@@ -137,8 +137,7 @@ function applyFilter(categoryId) {
 function initAdminMode() {
 
     const isConnected =
-        localStorage.getItem('token') &&
-        localStorage.getItem('userId');
+        localStorage.getItem('token');
 
     if (!isConnected) return;
 
